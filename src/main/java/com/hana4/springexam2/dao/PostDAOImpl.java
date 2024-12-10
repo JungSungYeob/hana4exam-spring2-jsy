@@ -57,9 +57,7 @@ public class PostDAOImpl implements PostDAO {
 		Optional<Post> post = postRepository.findById(id);
 		if (post.isPresent()) {
 			Post delPost = post.get();
-			System.out.println("hi");
 			postRepository.delete(delPost);
-			System.out.println("bye");
 			return PostMapper.toDTO(delPost);
 		} else {
 			throw new IllegalStateException("Post not found");

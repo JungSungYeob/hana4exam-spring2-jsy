@@ -17,7 +17,7 @@ public class CommentDTO {
 	private Long id;
 	private LocalDateTime createAt;
 	private LocalDateTime updateAt;
-	private Long postId;    // Post ID
-	private String writerId; // User ID
+	private Long post;    // Post ID
+	private String writer; // User ID
 	private String body;
 }

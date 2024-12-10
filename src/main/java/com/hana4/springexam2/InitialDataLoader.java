@@ -17,7 +17,7 @@ public class InitialDataLoader implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		System.out.println("hi");
+		// System.out.println("hi");
 		for (short n = 1; n <= 5; n++) {
 			userRepository.save(new User("Kim" + n, "Kim" + n + "@gmail.com"));
 		}

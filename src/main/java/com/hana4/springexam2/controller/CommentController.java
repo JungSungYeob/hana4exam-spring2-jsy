@@ -24,28 +24,23 @@ public class CommentController {
 	}
 
 	@PostMapping("/{pid}")
-	public CommentDTO createComment(@PathVariable String pid, @RequestBody CommentDTO commentDTO) {
-		return commentService.addComment(pid, commentDTO);
+	public CommentDTO createComment(@RequestBody CommentDTO commentDTO) {
+		return commentService.addComment(commentDTO);
 	}
 
-	@GetMapping("/list/{pid}")
+	@GetMapping("/{pid}")
 	public List<CommentDTO> getAllComments(@PathVariable String pid) {
 		return commentService.getAllCommentsByPid(pid);
 	}
 
-	@GetMapping("/{id}")
-	public CommentDTO getComment(@PathVariable String id) {
-		return commentService.getCommentById(id);
-	}
-
 	@DeleteMapping("/{id}")
-	public CommentDTO deleteComment(@PathVariable String id) {
+	public CommentDTO deleteComment(@PathVariable Long id) {
 		return commentService.removeCommentById(id);
 	}
 
 	@PatchMapping("/{id}")
-	public CommentDTO updateComment(@PathVariable String id, @RequestBody CommentDTO commentDTO) {
-		commentDTO.setId(Long.parseLong(id));
+	public CommentDTO updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDTO) {
+		commentDTO.setId(id);
 		return commentService.modifyCommentByDTO(commentDTO);
 	}
 }
