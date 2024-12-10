@@ -2,6 +2,7 @@ package com.hana4.springexam2.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,13 +29,13 @@ public class Comment extends BaseEntity {
 	private Long id;
 
 	@ManyToOne
-	// @JoinColumn(name = "post", nullable = false, foreignKey = @ForeignKey(name = "fk_Comment_Post"))
-	@JoinColumn(name = "post", nullable = false)
+	@JoinColumn(name = "post", nullable = false, foreignKey = @ForeignKey(name = "fk_Comment_Post"))
+	// @JoinColumn(name = "post", nullable = false)
 	private Post post;
 
 	@ManyToOne
-	// @JoinColumn(name = "writer", nullable = false, foreignKey = @ForeignKey(name = "fk_Comment_User"))
-	@JoinColumn(name = "writer", nullable = false)
+	@JoinColumn(name = "writer", nullable = false, foreignKey = @ForeignKey(name = "fk_Comment_User"))
+	// @JoinColumn(name = "writer", nullable = false)
 	@org.hibernate.annotations.Comment("작성자 ID")
 	private User writer;
 

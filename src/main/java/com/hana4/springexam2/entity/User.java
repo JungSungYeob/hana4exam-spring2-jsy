@@ -1,10 +1,17 @@
 package com.hana4.springexam2.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -22,8 +29,8 @@ import lombok.Setter;
 @Table(name = "User", uniqueConstraints = {@UniqueConstraint(name = "user_name_unique", columnNames = {"name"})})
 public class User {
 	@Id
-	@Column(name = "id", length = 36, nullable = false)
 	@GeneratedValue(strategy = GenerationType.UUID)
+	@Column(name = "id", length = 36, nullable = false)
 	private String id;
 
 	@Column(name = "name", nullable = false, length = 31, unique = true)
@@ -31,4 +38,22 @@ public class User {
 
 	@Column(name = "email", nullable = true, length = 255)
 	private String email;
+
+	@OneToMany(mappedBy = "writer", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<Comment> comments = new ArrayList<>();
+
+	@OneToMany(mappedBy = "writer", fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
+	private List<Post> posts = new ArrayList<>();
+
+	// @PrePersist
+	// public void prePersist() {
+	// 	if (this.id == null) {
+	// 		this.id = UUID.randomUUID().toString();
+	// 	}
+	// }
+	public User(String name, String email) {
+		this.id = UUID.randomUUID().toString(); // Generate UUID manually as a String
+		this.name = name;
+		this.email = email;
+	}
 }

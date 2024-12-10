@@ -4,6 +4,7 @@ import org.hibernate.annotations.Comment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,8 +34,8 @@ public class Post extends BaseEntity {
 	private String title;
 
 	@ManyToOne
-	// @JoinColumn(name = "writer", nullable = false, foreignKey = @ForeignKey(name = "fk_Post_User"))
-	@JoinColumn(name = "writer", nullable = false)
+	@JoinColumn(name = "writer", nullable = false, foreignKey = @ForeignKey(name = "fk_Post_User"))
+	// @JoinColumn(name = "writer", nullable = false)
 	@Comment("작성자 ID")
 	private User writer;
 

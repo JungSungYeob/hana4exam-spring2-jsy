@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hana4.springexam2.dto.PostDTO;
-import com.hana4.springexam2.entity.Post;
 import com.hana4.springexam2.service.PostService;
 
 @RestController
@@ -30,23 +29,23 @@ public class PostController {
 	}
 
 	@GetMapping("/list")
-	public List<Post> getAllPosts() {
+	public List<PostDTO> getAllPosts() {
 		return postService.getAllPost();
 	}
 
 	@GetMapping("/{id}")
-	public Post getPostById(@PathVariable Long id) {
-		return postService.getPost();
+	public PostDTO getPostById(@PathVariable Long id) {
+		return postService.getPost(id);
 	}
 
 	@PatchMapping("/{id}")
-	public Post updatePost(@PathVariable Long id, @RequestBody PostDTO postDTO) {
+	public PostDTO updatePost(@PathVariable Long id, @RequestBody PostDTO postDTO) {
 		postDTO.setId(id);
 		return postService.modifyPost(postDTO);
 	}
 
 	@DeleteMapping("/{id}")
-	public Post deletePost(@PathVariable Long id) {
+	public PostDTO deletePost(@PathVariable Long id) {
 		return postService.removePost(id);
 	}
 
