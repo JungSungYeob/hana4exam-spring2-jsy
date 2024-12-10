@@ -30,20 +30,19 @@ public class Comment extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "post", nullable = false, foreignKey = @ForeignKey(name = "fk_Comment_Post"))
-	// @JoinColumn(name = "post", nullable = false)
 	private Post post;
 
 	@ManyToOne
 	@JoinColumn(name = "writer", nullable = false, foreignKey = @ForeignKey(name = "fk_Comment_User"))
-	// @JoinColumn(name = "writer", nullable = false)
 	@org.hibernate.annotations.Comment("작성자 ID")
 	private User writer;
 
 	@Column(name = "body", nullable = false, length = 500)
 	private String body;
 
-	public Comment(String body, Post post, User user) {
+	public Comment(String body, Post post, User writer) {
 		this.body = body;
 		this.post = post;
+		this.writer = writer;
 	}
 }

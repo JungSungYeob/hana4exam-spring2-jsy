@@ -3,6 +3,7 @@ package com.hana4.springexam2.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hana4.springexam2.dao.PostDAO;
 import com.hana4.springexam2.dto.PostDTO;
@@ -36,6 +37,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	@Transactional
 	public PostDTO removePost(Long id) {
 		return postDAO.delete(id);
 	}

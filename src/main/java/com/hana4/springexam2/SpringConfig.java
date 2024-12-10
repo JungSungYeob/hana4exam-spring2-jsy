@@ -16,11 +16,6 @@ public class SpringConfig {
 		this.em = em;
 	}
 
-	// @Bean
-	// public UserRepository userRepository() {
-	// 	return new JPAUserRepository(em);
-	// }
-
 	@Bean
 	public OpenAPI openAPI() {
 		return new OpenAPI()

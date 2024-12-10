@@ -1,6 +1,7 @@
 package com.hana4.springexam2.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
@@ -27,23 +28,41 @@ public class PostDAOImpl implements PostDAO {
 	@Override
 	public PostDTO insert(PostDTO postDTO) {
 		User writer = new User();
-		writer.setId(postDTO.getWriterId());
+		writer.setId(postDTO.getWriter());
 		Post savePost = postRepository.save(PostMapper.toPost(postDTO, writer));
 		return PostMapper.toDTO(savePost);
 	}
 
 	@Override
 	public PostDTO findById(Long id) {
-		return null;
+		Optional<Post> post = postRepository.findById(id);
+		return post.map(PostMapper::toDTO).orElse(null);
 	}
 
 	@Override
 	public PostDTO update(PostDTO postDTO) {
-		return null;
+		Optional<Post> post = postRepository.findById(postDTO.getId());
+		if (post.isPresent()) {
+			Post savePost = post.get();
+			savePost.setTitle(postDTO.getTitle());
+			savePost.setBody(postDTO.getBody());
+			return PostMapper.toDTO(postRepository.save(savePost));
+		} else {
+			throw new IllegalStateException("Post not found");
+		}
 	}
 
 	@Override
 	public PostDTO delete(Long id) {
-		return null;
+		Optional<Post> post = postRepository.findById(id);
+		if (post.isPresent()) {
+			Post delPost = post.get();
+			System.out.println("hi");
+			postRepository.delete(delPost);
+			System.out.println("bye");
+			return PostMapper.toDTO(delPost);
+		} else {
+			throw new IllegalStateException("Post not found");
+		}
 	}
 }
