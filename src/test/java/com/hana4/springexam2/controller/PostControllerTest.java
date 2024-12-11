@@ -81,17 +81,21 @@ public class PostControllerTest {
 		mockMvc.perform(post("/post")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request)))
+			.andDo(print())
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("$.title").value("Sample Post Title"))
 			.andExpect(jsonPath("$.body").value("Sample Post Body"))
-			.andExpect(jsonPath("$.writer").value(writer.getId())).andDo(print());
+			.andExpect(jsonPath("$.writer").value(writer.getId()))
+			.andExpect(jsonPath("$.id").isNotEmpty())
+			.andExpect(jsonPath("$.createAt").isNotEmpty())
+			.andExpect(jsonPath("$.updateAt").isNotEmpty())
+			.andDo(print());
 	}
 
 	@Test
 	@Order(4)
 	void updatePostTest() throws Exception {
 		Map<String, String> request = new HashMap<>();
-		System.out.println("hi");
 		request.put("title", "Update Post Title");
 		request.put("body", "Update Post Body");
 		mockMvc.perform(patch("/post/{id}", postRepository.findAll().get(0).getId())
@@ -99,7 +103,11 @@ public class PostControllerTest {
 				.content(objectMapper.writeValueAsString(request)))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.title").value("Update Post Title"))
-			.andExpect(jsonPath("$.body").value("Update Post Body"));
+			.andExpect(jsonPath("$.body").value("Update Post Body"))
+			.andExpect(jsonPath("$.writer").isNotEmpty())
+			.andExpect(jsonPath("$.id").isNotEmpty())
+			.andExpect(jsonPath("$.createAt").isNotEmpty())
+			.andExpect(jsonPath("$.updateAt").isNotEmpty());
 	}
 
 	@Test
@@ -107,7 +115,14 @@ public class PostControllerTest {
 	void deletePostTest() throws Exception {
 		// postRepository.findAll().get(0)
 		mockMvc.perform(delete("/post/{id}", postRepository.findAll().get(0).getId())
-		).andExpect(status().isOk());
+			).andExpect(status().isOk())
+			.andExpect(jsonPath("$.title").isNotEmpty())
+			.andExpect(jsonPath("$.body").isNotEmpty())
+			.andExpect(jsonPath("$.writer").isNotEmpty())
+			.andExpect(jsonPath("$.id").isNotEmpty())
+			.andExpect(jsonPath("$.createAt").isNotEmpty())
+			.andExpect(jsonPath("$.updateAt").isNotEmpty());
+		;
 	}
 
 	@Test
@@ -116,7 +131,10 @@ public class PostControllerTest {
 		mockMvc.perform(get("/post/{id}", postRepository.findAll().get(0).getId()))
 			.andDo(print())
 			.andExpect(status().isOk()).andExpect(jsonPath("$.title").value("Initial Title1"))
-			.andExpect(jsonPath("$.body").value("Initial Body1"));
+			.andExpect(jsonPath("$.body").value("Initial Body1")).andExpect(jsonPath("$.writer").isNotEmpty())
+			.andExpect(jsonPath("$.id").isNotEmpty())
+			.andExpect(jsonPath("$.createAt").isNotEmpty())
+			.andExpect(jsonPath("$.updateAt").isNotEmpty());
 	}
 
 }

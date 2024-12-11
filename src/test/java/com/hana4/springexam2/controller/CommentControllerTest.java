@@ -76,7 +76,11 @@ public class CommentControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.body").value("Sample comment title"))
 			.andExpect(jsonPath("$.post").value(post.getId().toString()))
-			.andExpect(jsonPath("$.writer").value(writer.getId()));
+			.andExpect(jsonPath("$.writer").value(writer.getId()))
+			.andExpect(jsonPath("$.createAt").isNotEmpty())
+			.andExpect(jsonPath("$.updateAt").isNotEmpty())
+			.andExpect(jsonPath("$.id").isNotEmpty())
+			.andDo(print());
 	}
 
 	@Test
@@ -104,7 +108,10 @@ public class CommentControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.body").value("Updated comment title"))
 			.andExpect(jsonPath("$.post").value(comment.getPost().getId().toString()))
-			.andExpect(jsonPath("$.writer").value(comment.getWriter().getId()));
+			.andExpect(jsonPath("$.writer").value(comment.getWriter().getId()))
+			.andExpect(jsonPath("$.createAt").isNotEmpty())
+			.andExpect(jsonPath("$.updateAt").isNotEmpty())
+			.andExpect(jsonPath("$.id").isNotEmpty());
 	}
 
 	@Test

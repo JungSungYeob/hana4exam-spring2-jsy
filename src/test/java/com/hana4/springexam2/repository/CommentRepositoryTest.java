@@ -62,7 +62,7 @@ public class CommentRepositoryTest {
 	}
 
 	@Test
-	public void updateCommentTest() {
+	public void updateCommentTest() throws InterruptedException {
 		User writer = new User();
 		writer.setName("Kim");
 		writer.setEmail("kim@naver.com");
@@ -80,9 +80,15 @@ public class CommentRepositoryTest {
 		comment.setBody("Legacy Body Sample: Legacy sample contents");
 		Comment savedComment = commentRepository.save(comment);
 
+		Thread.sleep(1000);
+
 		Comment newComment = commentRepository.findById(savedComment.getId()).orElseThrow();
 		newComment.setBody("Updated Body Sample: Updated sample contents");
 		Comment updatedComment = commentRepository.save(newComment);
+
+		commentRepository.flush();
+
+		em.clear();
 
 		LocalDateTime now = LocalDateTime.now();
 
@@ -93,6 +99,8 @@ public class CommentRepositoryTest {
 		assertThat(updatedComment.getUpdateAt().format(formatter)).isEqualTo(now.format(formatter));
 		assertThat(updatedComment.getWriter()).isEqualTo(writer);
 		assertThat(updatedComment.getPost()).isEqualTo(post);
+		assertThat(updatedComment.getCreateAt().format(formatter)).isNotEqualTo(
+			updatedComment.getUpdateAt().format(formatter));
 	}
 
 	@Test
@@ -154,5 +162,7 @@ public class CommentRepositoryTest {
 		assertThat(comments.get(1).getBody()).isEqualTo("Body Sample2: sample contents");
 		assertThat(comments.get(0).getWriter()).isEqualTo(writer);
 		assertThat(comments.get(1).getWriter()).isEqualTo(writer);
+		assertThat(comments.get(0).getPost().getId()).isEqualTo(post.getId());
+		assertThat(comments.get(1).getPost().getId()).isEqualTo(post.getId());
 	}
 }

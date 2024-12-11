@@ -53,7 +53,7 @@ public class PostRepositoryTest {
 	}
 
 	@Test
-	public void updatePostTest() {
+	public void updatePostTest() throws InterruptedException {
 		User writer = new User();
 		writer.setName("Kim");
 		writer.setEmail("Kim@naver.com");
@@ -65,15 +65,23 @@ public class PostRepositoryTest {
 		post.setWriter(writer);
 		Post savedPost = postRepository.save(post);
 
+		Thread.sleep(1000);
+
 		Post newPost = postRepository.findById(savedPost.getId()).orElseThrow();
 		newPost.setTitle("Updated Post Title");
 		newPost.setBody("Updated Post Body: Updated Post Contents");
 		Post updatedPost = postRepository.save(newPost);
 
+		postRepository.flush();
+
+		em.clear();
+
 		LocalDateTime now = LocalDateTime.now();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+		assertThat(updatedPost.getCreateAt().format(formatter)).isNotEqualTo(
+			updatedPost.getUpdateAt().format(formatter));
 		assertThat(updatedPost.getId()).isNotNull();
 		assertThat(updatedPost.getTitle()).isEqualTo("Updated Post Title");
 		assertThat(updatedPost.getBody()).isEqualTo("Updated Post Body: Updated Post Contents");
@@ -128,13 +136,15 @@ public class PostRepositoryTest {
 
 		assertThat(posts).hasSize(2);
 		assertThat(posts.get(0).getTitle()).isEqualTo("Title Sample1");
+		assertThat(posts.get(0).getBody()).isEqualTo("Body Sample1: sample contents1");
 		assertThat(posts.get(0).getWriter()).isEqualTo(writer1);
 		assertThat(posts.get(1).getTitle()).isEqualTo("Title Sample2");
 		assertThat(posts.get(1).getWriter()).isEqualTo(writer2);
+		assertThat(posts.get(1).getBody()).isEqualTo("Body Sample: sample contents2");
 	}
 
 	@Test
-	public void getPostTest() {
+	public void getPostTest() throws InterruptedException {
 		User writer = new User();
 		writer.setName("Kim10");
 		writer.setEmail("Kim10@naver.com");
@@ -148,10 +158,23 @@ public class PostRepositoryTest {
 
 		Optional<Post> retrievedPost = postRepository.findById(post.getId());
 
+		Thread.sleep(1000);
+
+		postRepository.flush();
+
+		em.clear();
+
+		LocalDateTime now = LocalDateTime.now();
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 		assertThat(retrievedPost).isPresent();
+		assertThat(retrievedPost.get().getId()).isNotNull();
 		assertThat(retrievedPost.get().getTitle()).isEqualTo(post.getTitle());
 		assertThat(retrievedPost.get().getBody()).isEqualTo(post.getBody());
 		assertThat(retrievedPost.get().getWriter()).isEqualTo(writer);
 		assertThat(retrievedPost.get().getWriter().getName()).isEqualTo(writer.getName());
+		assertThat(retrievedPost.get().getCreateAt().format(formatter)).isNotEqualTo(now.format(formatter));
+
 	}
 }
