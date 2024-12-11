@@ -18,7 +18,13 @@ public class PostDTO {
 	private LocalDateTime createAt;
 	private LocalDateTime updateAt;
 	private String title;
-	private String writer; // User ID
+	private String writer;
 	private String body;
+
+	public PostDTO(String title, String writer, String body) {
+		this.title = title;
+		this.writer = writer;
+		this.body = body;
+	}
 }
 

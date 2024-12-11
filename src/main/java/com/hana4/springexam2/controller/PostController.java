@@ -2,6 +2,8 @@ package com.hana4.springexam2.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,9 +25,15 @@ public class PostController {
 		this.postService = postService;
 	}
 
+	// @PostMapping()
+	// public PostDTO addPost(@RequestBody PostDTO postDTO) {
+	// 	return postService.addPost(postDTO);
+	// }
+
 	@PostMapping()
-	public PostDTO addPost(@RequestBody PostDTO postDTO) {
-		return postService.addPost(postDTO);
+	public ResponseEntity<PostDTO> addPost(@RequestBody PostDTO postDTO) {
+		PostDTO createdPost = postService.addPost(postDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
 	}
 
 	@GetMapping()

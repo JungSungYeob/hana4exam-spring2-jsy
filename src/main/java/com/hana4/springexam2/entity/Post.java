@@ -1,7 +1,11 @@
 package com.hana4.springexam2.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.Comment;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
@@ -10,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,8 +46,8 @@ public class Post extends BaseEntity {
 	@Column(name = "body", nullable = false, columnDefinition = "TEXT")
 	private String body;
 
-	// @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-	// private List<com.hana4.springexam2.entity.Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<com.hana4.springexam2.entity.Comment> comments = new ArrayList<>();
 
 	public Post(String title, User writer, String body) {
 		this.title = title;
