@@ -1,5 +1,6 @@
 package com.hana4.springexam2.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -113,8 +114,8 @@ public class PostControllerTest {
 	@Test
 	@Order(3)
 	void deletePostTest() throws Exception {
-		// postRepository.findAll().get(0)
-		mockMvc.perform(delete("/post/{id}", postRepository.findAll().get(0).getId())
+		Post post = postRepository.findAll().get(0);
+		mockMvc.perform(delete("/post/{id}", post.getId())
 			).andExpect(status().isOk())
 			.andExpect(jsonPath("$.title").isNotEmpty())
 			.andExpect(jsonPath("$.body").isNotEmpty())
@@ -122,7 +123,8 @@ public class PostControllerTest {
 			.andExpect(jsonPath("$.id").isNotEmpty())
 			.andExpect(jsonPath("$.createAt").isNotEmpty())
 			.andExpect(jsonPath("$.updateAt").isNotEmpty());
-		;
+
+		assertFalse(postRepository.existsById(post.getId()));
 	}
 
 	@Test

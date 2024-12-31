@@ -1,5 +1,6 @@
 package com.hana4.springexam2.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -117,7 +118,10 @@ public class CommentControllerTest {
 	@Test
 	@Order(4)
 	void deleteComment() throws Exception {
-		mockMvc.perform(delete("/comments/{id}", commentRepository.findAll().get(0).getId()))
+		Comment comment = commentRepository.findAll().get(0);
+		mockMvc.perform(delete("/comments/{id}", comment.getId()))
 			.andExpect(status().isOk());
+
+		assertFalse(commentRepository.existsById(comment.getId()));
 	}
 }
